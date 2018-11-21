@@ -148,7 +148,7 @@ public class World implements Serializable{
 	public void setHomeY(double homeY) {this.homeY = homeY;}
 	public void setDefaultCoef(double defaultCoef) {this.defaultCoef = defaultCoef;}
 	public void setHomeCoef(double homeCoef) {this.homeCoef = homeCoef;}
-	public void setFricition(double friction) {this.friction = friction;}
+	public void setFriction(double friction) {this.friction = friction;}
 	public void setMaxStopDist(double maxStopDist) {this.maxStopDist = maxStopDist;}
 	public void setMaxForce(double maxForce) {
 		this.maxForce = maxForce; 
@@ -170,6 +170,11 @@ public class World implements Serializable{
 	public double[] getPosArrayX() {return posArrayX;}
 	public double[] getPosArrayY() {return posArrayY;}
 	public double getMaxForce() {return this.maxForce;}
+	public int getMaxTicks() {return maxTicks;}
+	public int getPosArraySize() {return posArraySize;}
+	public double getHomeCoef() {return homeCoef;}
+	public double getFriction() {return friction;}
+	public double getMaxStopDist() {return maxStopDist;}
 	
 }
 
