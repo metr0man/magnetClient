@@ -1,8 +1,12 @@
 package chaosSimulatorPlotter;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
@@ -15,6 +19,8 @@ public class MainClient {
 	public static int port = 42028;
 	public static boolean connectionAlive;
 	private static boolean running = true;
+    private static ObjectOutputStream objOut;
+    private static ObjectInputStream objIn; 
 	
 	private static int delay = 5000; //delay in ms for main connection loop
 	private static int numThreads = 2; //number of local threads
@@ -27,9 +33,8 @@ public class MainClient {
 			if(connectionAlive) {
 					World world;
 					double[][] points;
-					try {
-						ObjectInputStream objIn = new ObjectInputStream(socket.getInputStream());
-						ObjectOutputStream objOut = new ObjectOutputStream(socket.getOutputStream());
+					try { 
+						System.out.println("waiting to receive batch");
 						points = (double[][]) objIn.readObject();
 						System.out.println("batch received of size "+points.length);
 						world  = (World) objIn.readObject();
@@ -37,6 +42,7 @@ public class MainClient {
 						System.out.println("batch sent to server");
 					} catch (Exception e) {
 						System.out.println("connecion lost");
+						e.printStackTrace(System.err);
 						connectionAlive = false;
 					}
 			}
@@ -45,15 +51,17 @@ public class MainClient {
 				if (connectionAlive) {
 					continue;
 				}
+				else {
+					Thread.sleep(delay);
+				}
 			}
 			
-			Thread.sleep(delay);
 		}
 		
 		
 		
 	}
-	public static boolean establishConnection() {
+	public static boolean establishConnection() throws IOException, ClassNotFoundException {
 		try {
 			socket = new Socket(remoteHost, port);
 		} catch (UnknownHostException e) {
@@ -64,6 +72,12 @@ public class MainClient {
 			return false;
 		} 
 		System.out.println("connection successful to "+remoteHost);
+		//confirm as client, not controller
+		objIn = new ObjectInputStream(socket.getInputStream());
+		objOut = new ObjectOutputStream(socket.getOutputStream());
+		objOut.writeObject("client");
+		System.out.println("waiting for confirmation of status as client");
+		System.out.println((String) objIn.readObject());
 		return true;
 	}
 	
