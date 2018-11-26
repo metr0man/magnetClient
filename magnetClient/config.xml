@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<root>
+	<ip>172.20.10.4</ip>
+	<port>42028</port>
+	<numThreads>2</numThreads>
+</root>

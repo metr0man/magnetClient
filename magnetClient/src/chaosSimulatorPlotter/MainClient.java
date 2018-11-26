@@ -1,5 +1,6 @@
 package chaosSimulatorPlotter;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -7,21 +8,44 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import simulation.World;
 
 public class MainClient {
 	public static Socket socket;
-	public static String remoteHost = "localhost";
-	public static int port = 42028;
+	public static String remoteHost = "localhost"; //default
+	public static int port = 42028; //default
 	public static boolean connectionAlive;
 	private static boolean running = true;
 	
 	private static int delay = 5000; //delay in ms for main connection loop
-	private static int numThreads = 2; //number of local threads
+	private static int numThreads = 2; //default
 	
 	public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException {
-		System.out.println("Attempting to connect to "+remoteHost);
-		
+		//read data
+		try {
+			File file = new File("config.xml");
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(file);
+			doc.getDocumentElement().normalize();
+			
+			remoteHost = doc.getElementsByTagName("ip").item(0).getTextContent();
+			port = Integer.parseInt(doc.getElementsByTagName("port").item(0).getTextContent());
+			numThreads = Integer.parseInt(doc.getElementsByTagName("numThreads").item(0).getTextContent());
+			
+			System.out.println("Attempting to connect to "+remoteHost+" on port "+port+" with "+numThreads+" threads");
+		} catch (Exception e) {
+			System.out.println("error in file reading");
+		}
+				
 		connectionAlive = false;
 		while(running) {
 			if(connectionAlive) {
