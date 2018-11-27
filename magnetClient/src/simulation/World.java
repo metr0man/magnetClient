@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class World implements Serializable{
-
+		
 	private double startArmX = 0;
 	private double startArmY = 0;
 	private double armX = startArmX;
@@ -30,6 +30,7 @@ public class World implements Serializable{
 	
 	private int maxTicks = 100000;
 	
+	private ArrayList<Magnet> defaultMagnets = new ArrayList<Magnet>();
 	private ArrayList<Magnet> magnets = new ArrayList<Magnet>();
 	
 	public World(int posArraySize) {
@@ -39,13 +40,12 @@ public class World implements Serializable{
 		posArrayY = new double[posArraySize];
 		
 		for (int i = 0; i < posArraySize; i++) {
-			
 			posArrayX[i] = i * 10;
 			posArrayY[i] = i * 10;
 		}
 		
-		//DefaultSetups.setup1(this);
-		
+		magnets.clear();
+		magnets = defaultMagnets;	
 	}
 	
 	
@@ -73,11 +73,9 @@ public class World implements Serializable{
 			posArrayX[i] = i * 10;
 			posArrayY[i] = i * 10;
 		}
-		magnets.clear();
-		Magnet.totalMagnets = 0;
 		
-		//setup magnets
-		DefaultSetups.setup1(this);
+		magnets.clear();
+		magnets = defaultMagnets;
 	}
 
 	
@@ -155,6 +153,7 @@ public class World implements Serializable{
 		Logic.setMaxForce(maxForce);
 	}
 	public void setMaxTicks(int maxTicks) { this.maxTicks = maxTicks;}
+	public void setDefaultMagnets(ArrayList<Magnet> defaultMagnets) {this.defaultMagnets = defaultMagnets;}
 	
 	
 	//getters

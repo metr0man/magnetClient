@@ -1,6 +1,8 @@
 package simulation;
 
-public class Magnet {
+import java.io.Serializable;
+
+public class Magnet implements Serializable{
 	private int xPos;
 	private int yPos;
 	private double coef; //magnet coefficient 
@@ -17,21 +19,12 @@ public class Magnet {
 		totalMagnets++;
 	}
 	
+	//getters
 	public int getXPos() { return this.xPos; }
 	public int getYPos() { return this.yPos; }
 	public double getCoef() { return this.coef; }
-
-
-
-	public void setxPos(int xPos) {
-		this.xPos = xPos;
-	}
-
-
-
-	public void setyPos(int yPos) {
-		this.yPos = yPos;
-	}
 	
-	
+	//setters
+	public void setxPos(int xPos) {	this.xPos = xPos;}
+	public void setyPos(int yPos) {	this.yPos = yPos;}
 }
